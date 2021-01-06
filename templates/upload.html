@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Image Classification Project">
+    <meta name="author" content="Ansonika">
+    <title>Image Classification</title>
+
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="{{ url_for('static', filename = 'img/favicon.ico') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon"
+          href="{{ url_for('static', filename = 'img/apple-touch-icon-57x57-precomposed.png') }}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72"
+          href="{{ url_for('static', filename = 'img/apple-touch-icon-72x72-precomposed.png') }}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
+          href="{{ url_for('static', filename = 'img/apple-touch-icon-114x114-precomposed.png') }}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
+          href="{{ url_for('static', filename = 'img/apple-touch-icon-144x144-precomposed.png') }}">
+
+    <!-- GOOGLE WEB FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,500,600" rel="stylesheet">
+
+    <!-- BASE CSS -->
+    <link href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename = 'css/menu.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename = 'css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename = 'css/vendors.css') }}" rel="stylesheet">
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="{{ url_for('static', filename = 'css/custom.css') }}" rel="stylesheet">
+
+    <!-- MODERNIZR MENU -->
+    <script src="{{ url_for('static', filename = 'js/modernizr.js') }}"></script>
+
+</head>
+
+<body>
+
+<div id="preloader">
+    <div data-loader="circle-side"></div>
+</div><!-- /Preload -->
+
+<div id="loader_form">
+    <div data-loader="circle-side-2"></div>
+</div><!-- /loader_form -->
+<!-- /menu -->
+<div class="container-fluid">
+    <div class="row row-height">
+        <div class="col-xl-4 col-lg-4 content-left">
+            <div class="content-left-wrapper">
+                <!-- /social -->
+                <div>
+                    <figure><img src="{{ url_for('static', filename = 'img/info_graphic_1.svg') }}" alt=""
+                                 class="img-fluid" width="270" height="270"></figure>
+                    <h2>Flowers Image Classifier</h2>
+                    <p style="text-align: justify">This taking a flower image as input and outputting the most likely
+                        type/class of the flower. The goal of this project is to build an web application that will be
+                        trained on set of labeled flower images to make predictions on the given input.</p>
+                    <a href="#0" class="btn_1 rounded yellow">Find Us on Github</a>
+                </div>
+                <div class="copy">DataSince © 2020 Flowers Classifier Project</div>
+            </div>
+            <!-- /content-left-wrapper -->
+        </div>
+        <!-- /content-left -->
+        <div class="col-xl-8 col-lg-8 content-right" id="end">
+            <div id="wizard_container">
+                <div id="top-wizard">
+                    <div id="progressbar"></div>
+                </div>
+                <!-- /top-wizard -->
+                <form id="wrapped" method="post" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+                    <!-- Leave for security protection, read docs for details -->
+                    <div id="middle-wizard">
+                        <div class="step submit" id="end">
+                            <h2 class="section_title">Prediction</h2>
+                            <h3 class="main_question">Upload Flower Image to Predict</h3>
+                            <div class="form-group add_top_10">
+                                <div class="form-group add_bottom_30 add_top_20">
+                                    <label>Upload Image<br><small>(Files accepted: .jpg, - Max file size:
+                                        2MB for demo limit)</small></label>
+                                    <div class="fileupload">
+                                        <input type="file" name="file_upload" id="file_upload" onchange="readURL(this);"
+                                               accept="image/jpeg/image/jpg"
+                                               class="required">
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="main_question">Select one of a trained models</h3>
+                            <div class="form-group">
+                                <label class="container_radio version_2">KNN Classifier
+                                    <input type="radio" name="model" value="knn" class="required">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="container_radio version_2">Decision Tree Classifier
+                                    <input type="radio" name="model" value="dt" class="required">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="container_radio version_2">Naive Bayes Classifier
+                                    <input type="radio" name="model" value="nb" class="required">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /step-->
+                    </div>
+                    <!-- /middle-wizard -->
+                    <div class="bottom-wizard">
+                        <button type="submit" name="process" class="submit">Submit</button>
+                    </div>
+                    <!-- /bottom-wizard -->
+                </form>
+            </div>
+            <!-- /Wizard container -->
+        </div>
+        <!-- /content-right-->
+    </div>
+    <!-- /row-->
+</div>
+<!-- /container-fluid -->
+
+<div class="cd-overlay-nav">
+    <span></span>
+</div>
+<!-- /cd-overlay-nav -->
+
+<div class="cd-overlay-content">
+    <span></span>
+</div>
+<!-- /cd-overlay-content -->
+
+<!-- Modal terms -->
+<div class="modal fade" id="prediction_results" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="termsLabel">Prediction Results</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img id="sample_image"
+                     style="display: block;margin: 10px auto;border: 3px dashed #e9ecef;padding: 20px;"
+                     src="">
+                <div class="form-group">
+                    <label for="fixed_rate_contract">Predicted Type</label>
+                    <input type="text" name="" id="flower_type" disabled="" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn_1" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- COMMON SCRIPTS -->
+<script src="{{ url_for('static', filename = 'js/jquery-3.2.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/common_scripts.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/velocity.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/common_functions.js') }}"></script>
+<script src="{{ url_for('static', filename = 'js/file-validator.js') }}"></script>
+<!-- Wizard script-->
+<script src="{{ url_for('static', filename = 'js/func_1.js') }}"></script>
+
+</body>
+</html>
